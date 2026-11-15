@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Endless Scroll — Bruhadesh</title>
+<meta name="description" content="A short tour of infinite scroll: how a simple interface pattern changes the way we browse, decide, and spend time online.">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #000; scroll-behavior: smooth; }
+  body {
+    background: #000; color: #fff;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  a { color: #fff; border-bottom: 1px solid #555; text-decoration: none; }
+  a:hover { border-bottom-color: #fff; }
+  .back { font-size: 14px; color: #aaa; border: none; }
+  .back:hover { color: #fff; }
+  h1 { font-size: 40px; line-height: 1.15; font-weight: 600; letter-spacing: -.8px; margin: 28px 0 10px; }
+  .meta { color: #aaa; font-size: 14px; margin-bottom: 36px; }
+  h2 { font-size: 22px; font-weight: 600; margin: 44px 0 12px; }
+  p { margin-bottom: 18px; color: #ddd; }
+  ul { margin: 0 0 18px 22px; color: #ddd; }
+  li { margin-bottom: 8px; }
+  em { color: #fff; }
+  pre {
+    background: #0d0d0d; border: 1px solid #333; border-radius: 6px;
+    padding: 16px; overflow-x: auto; font-size: 14px;
+    line-height: 1.55; margin: 0 0 22px;
+  }
+  code { font-family: "SFMono-Regular", Consolas, "Courier New", monospace; }
+  p code, li code { background: #1a1a1a; padding: 1px 6px; border-radius: 4px; font-size: .9em; }
+  .note { border-left: 2px solid #555; padding-left: 16px; color: #aaa; margin-bottom: 22px; }
+  .quote { font-size: 22px; line-height: 1.45; color: #fff; margin: 34px 0; padding-left: 18px; border-left: 2px solid #fff; }
+  hr { border: none; border-top: 1px solid #333; margin: 48px 0 24px; }
+  .foot { color: #aaa; font-size: 14px; }
+  figure { margin: 34px 0; text-align: center; }
+  figure svg { width: 100%; max-width: 340px; height: auto; }
+  figcaption { color: #888; font-size: 13px; margin-top: 10px; font-style: italic; }
+  .s { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .f { fill: #fff; stroke: none; }
+  svg text { fill: #fff; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13px; text-anchor: middle; }
+  .feed { animation: drift 5s infinite ease-in-out; }
+  .feed.delay { animation-delay: -2.5s; }
+  @keyframes drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+  .arrow { animation: nudge 1.8s infinite ease-in-out; }
+  @keyframes nudge { 0%, 100% { transform: translateY(0); opacity: .45; } 50% { transform: translateY(7px); opacity: 1; } }
+  .ring { transform-origin: 100px 100px; animation: rotate 12s linear infinite; }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .feed, .arrow, .ring { animation: none; }
+  }
+  @media (max-width: 480px) {
+    .page { padding: 42px 20px 72px; }
+    h1 { font-size: 34px; }
+    body { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back" href="/">← back to portfolio</a>
+  <h1>The Endless Scroll</h1>
+  <div class="meta">Bruhadesh · Nov 2026 · tech × psychology · 6 min read</div>
+
+  <figure>
+    <svg viewBox="0 0 240 220" role="img" aria-label="A phone screen with an endlessly moving feed">
+      <rect class="s" x="58" y="5" width="124" height="208" rx="19"/>
+      <line class="s" x1="99" y1="18" x2="141" y2="18"/>
+      <g class="feed">
+        <rect class="s" x="75" y="39" width="90" height="39" rx="5"/>
+        <circle class="s" cx="91" cy="53" r="6"/>
+        <line class="s" x1="105" y1="51" x2="153" y2="51"/>
+        <line class="s" x1="105" y1="61" x2="142" y2="61"/>
+        <rect class="s" x="75" y="89" width="90" height="39" rx="5"/>
+        <circle class="s" cx="91" cy="103" r="6"/>
+        <line class="s" x1="105" y1="101" x2="153" y2="101"/>
+        <line class="s" x1="105" y1="111" x2="142" y2="111"/>
+      </g>
+      <g class="feed delay">
+        <rect class="s" x="75" y="139" width="90" height="39" rx="5"/>
+        <circle class="s" cx="91" cy="153" r="6"/>
+        <line class="s" x1="105" y1="151" x2="153" y2="151"/>
+        <line class="s" x1="105" y1="161" x2="142" y2="161"/>
+      </g>
+      <path class="s arrow" d="M112 187 l8 8 8 -8"/>
+    </svg>
+    <figcaption>Fig. 1 — a feed with no obvious final page.</figcaption>
+  </figure>
+
+  <p>You open an app to check one thing. A message, maybe. A quick update. You tell yourself it will take a minute. Then one post becomes another, a video starts before you decide whether you want it, and the next item is already waiting underneath.</p>
+  <p>At some point you stop asking what you came for. You keep moving because there is always something else to see.</p>
+  <p>That is the strange power of infinite scroll: it removes the moment when browsing naturally asks you to stop.</p>
+
+  <h2>The tech: removing the page boundary</h2>
+  <p>Traditional pagination divides content into pages. You reach the bottom, make a decision, and click <em>Next</em>. Infinite scroll replaces that explicit action with automatic loading. When the user approaches the end of the visible feed, the application requests another batch of items and appends them to the page.</p>
+  <p>A common implementation uses the browser's <code>IntersectionObserver</code>. Instead of checking the scroll position on every frame, the browser tells the application when a small sentinel element near the bottom becomes visible.</p>
+
+  <pre><code>// Observe a marker placed after the feed
+const observer = new IntersectionObserver(async entries =&gt; {
+  if (!entries[0].isIntersecting || loading || !hasMore) return;
+
+  loading = true;
+  const nextPage = await fetchPosts(cursor);
+
+  renderPosts(nextPage.items);
+  cursor = nextPage.nextCursor;
+  hasMore = Boolean(cursor);
+  loading = false;
+});
+
+observer.observe(document.querySelector("#feed-end"));</code></pre>
+
+  <p>The mechanism is simple, but the product decisions around it are not. How early should the next batch load? How much content should be fetched? What happens when the network is slow? Can someone return to the same position after opening an item?</p>
+  <p>Good infinite scroll is not just a feed that keeps growing. It is a feed that remains responsive, remembers context, and does not quietly turn a temporary visit into an endless one.</p>
+
+  <h2>The psychology, part 1: no stopping signal</h2>
+  <p>Pages create boundaries. A final item, a footer, or a numbered page gives the mind a small opportunity to evaluate: <em>Am I done?</em> Infinite scroll weakens that checkpoint. The next set of items arrives before the current set has become a clear endpoint.</p>
+  <p>This does not mean people lose all control when they scroll. It means the interface removes one useful cue that might have helped them make a deliberate choice. Stopping now requires an active decision instead of being prompted by the structure of the page.</p>
+
+  <div class="quote">When the next item is automatic, stopping has to become intentional.</div>
+
+  <h2>The psychology, part 2: the next item might be better</h2>
+  <p>Feeds mix ordinary posts with occasional items that feel unusually relevant, funny, surprising, or useful. You cannot know exactly where the next rewarding item will appear, so continuing can feel like a reasonable bet: perhaps the next swipe will be worth it.</p>
+  <p>This resembles the logic of variable rewards, but it is worth being precise: not every scrolling session is an addiction, and not every feed is deliberately engineered to exploit its users. The important design point is that unpredictable rewards can encourage repeated checking, especially when the cost of continuing is only another small gesture.</p>
+  <p>Each swipe is cheap. The total time spent across hundreds of swipes is not.</p>
+
+  <figure>
+    <svg viewBox="0 0 340 190" role="img" aria-label="A sequence of feed cards with one highlighted card">
+      <rect class="s" x="8" y="36" width="68" height="82" rx="7"/>
+      <rect class="s" x="91" y="36" width="68" height="82" rx="7"/>
+      <rect class="s" x="174" y="25" width="76" height="104" rx="7"/>
+      <rect class="s" x="265" y="36" width="68" height="82" rx="7"/>
+      <path class="s" d="M20 52 h44 M20 63 h32 M103 52 h44 M103 63 h32 M188 43 h48 M188 55 h36 M277 52 h44 M277 63 h32"/>
+      <path class="s" d="M42 139 H298"/>
+      <path class="s arrow" d="M291 132 l8 7 -8 7"/>
+      <text x="42" y="165">usual</text>
+      <text x="125" y="165">usual</text>
+      <text x="212" y="165">standout</text>
+      <text x="299" y="165">next?</text>
+    </svg>
+    <figcaption>Fig. 2 — most items are ordinary; one standout can make the next swipe feel promising.</figcaption>
+  </figure>
+
+  <h2>The psychology, part 3: attention has a switching cost</h2>
+  <p>Scrolling often looks like doing nothing, but the mind is continuously making small decisions: whether to pause, read, watch, react, skip, or open a link. Every new item asks for a slice of attention.</p>
+  <p>When those items arrive rapidly, it becomes easy to move from one topic to another without choosing a destination. You may remember a few posts, but struggle to explain what you actually spent the last twenty minutes doing.</p>
+  <p>The issue is not that short pieces of content are inherently bad. It is that a stream designed around constant novelty can make sustained attention feel comparatively effortful.</p>
+
+  <h2>The product question: useful discovery or endless consumption?</h2>
+  <p>Infinite scroll has real advantages. It can make discovery feel natural, reduce unnecessary clicks, and work well when people are exploring a large collection of items. A photo feed, search result stream, or live activity timeline may genuinely benefit from it.</p>
+  <p>But the same pattern can hide important information: how much content remains, where the user is, and whether they have reached a meaningful stopping point. It can also create accessibility problems if focus, screen-reader announcements, or keyboard navigation are not handled carefully.</p>
+  <p>There is no universal rule that infinite scroll is good or bad. The question is whether the pattern serves the user's goal—or whether the user's continued attention has quietly become the goal.</p>
+
+  <h2>If you build this stuff</h2>
+  <ul>
+    <li>Keep a clear loading state and communicate when there is no more content.</li>
+    <li>Preserve scroll position when users open an item and return to the feed.</li>
+    <li>Use pagination or a deliberate “Load more” control when people need a clear sense of progress or an endpoint.</li>
+    <li>Make keyboard navigation and screen-reader behavior part of the design, not an afterthought.</li>
+    <li>Measure successful task completion, not just session length or the number of items consumed.</li>
+  </ul>
+
+  <h2>If you use these apps</h2>
+  <ul>
+    <li>Decide what you came to do before opening the feed.</li>
+    <li>Use a timer or a natural stopping point when you only have a few minutes.</li>
+    <li>Move apps that pull you into automatic scrolling away from your home screen.</li>
+    <li>When you notice that you are scrolling without interest, treat that as a useful signal to stop.</li>
+  </ul>
+
+  <p>Infinite scroll is a small engineering decision with a large effect on the shape of an online experience. It removes a boundary from the interface. Whether that makes discovery smoother or attention harder to reclaim depends on what the product chooses to optimize.</p>
+  <p>The feed can always have one more item. You do not have to.</p>
+
+  <hr>
+  <p class="foot">Written by Bruhadesh · <a href="https://github.com/kbruhadesh">GitHub</a> · <a href="https://www.linkedin.com/in/kbruhadesh/">LinkedIn</a></p>
+</div>
+</body>
+</html>

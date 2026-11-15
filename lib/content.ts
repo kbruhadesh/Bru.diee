@@ -294,4 +294,37 @@ export type Blog = {
 //   tags: ["AI", "FastAPI"],
 //   link: "https://medium.com/@you/my-first-post",
 // },
-export const blogs: Blog[] = [];
+export const blogs: Blog[] = [
+  {
+    id: "the-three-dots",
+    title: "The Three Dots",
+    date: "Nov 2026",
+    summary:
+      "Why the typing bubble and notification ding get under our skin — exploring the technology and psychology behind digital communication, anticipation, and uncertainty.",
+    tags: [
+      "Technology",
+      "Psychology",
+      "WebSockets",
+      "Human-Computer Interaction",
+    ],
+    link: "/blogs/three-dots.html",
+  },
+
+{
+  id: "the-endless-scroll",
+  title: "The Endless Scroll",
+  date: "Nov 2026",
+  summary:
+    "Why do we keep scrolling even when we're no longer interested? Exploring infinite scroll, variable rewards, attention, and the psychology of digital consumption.",
+  tags: [
+    "Technology",
+    "Psychology",
+    "UI/UX",
+    "Human-Computer Interaction",
+  ],
+  link: "/blogs/endless-scroll.html",
+},
+];
+
+
+

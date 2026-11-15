@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Three Dots — Bruhadesh</title>
+<meta name="description" content="Why the 'typing…' bubble and the notification ding get under our skin: a short tour of the tech and the psychology behind them.">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #000; }
+  body { background:#000; color:#fff; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+         font-size:17px; line-height:1.75; -webkit-font-smoothing:antialiased; }
+  .page { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  a { color:#fff; border-bottom:1px solid #555; text-decoration:none; }
+  a:hover { border-bottom-color:#fff; }
+  .back { font-size:14px; color:#aaa; border:none; }
+  .back:hover { color:#fff; }
+  h1 { font-size:40px; line-height:1.15; font-weight:600; letter-spacing:-0.8px; margin:28px 0 10px; }
+  .meta { color:#aaa; font-size:14px; margin-bottom:36px; }
+  h2 { font-size:22px; font-weight:600; margin:44px 0 12px; }
+  p { margin-bottom:18px; color:#ddd; }
+  ul { margin:0 0 18px 22px; color:#ddd; }
+  li { margin-bottom:8px; }
+  em { color:#fff; }
+  pre { background:#0d0d0d; border:1px solid #333; border-radius:6px; padding:16px; overflow-x:auto;
+        font-size:14px; line-height:1.55; margin:0 0 22px; }
+  code { font-family:"SFMono-Regular",Consolas,"Courier New",monospace; }
+  p code, li code { background:#1a1a1a; padding:1px 6px; border-radius:4px; font-size:0.9em; }
+  .note { border-left:2px solid #555; padding-left:16px; color:#aaa; margin-bottom:22px; }
+  .quote { font-size:22px; line-height:1.45; color:#fff; margin:34px 0; padding-left:18px; border-left:2px solid #fff; }
+  hr { border:none; border-top:1px solid #333; margin:48px 0 24px; }
+  .foot { color:#aaa; font-size:14px; }
+
+  figure { margin:34px 0; text-align:center; }
+  figure svg { width:100%; max-width:340px; height:auto; }
+  figcaption { color:#888; font-size:13px; margin-top:10px; font-style:italic; }
+  .s { fill:none; stroke:#fff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .f { fill:#fff; stroke:none; }
+  svg text { fill:#fff; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:13px; text-anchor:middle; }
+
+  /* gentle motion */
+  .dot { animation: blink 1.4s infinite ease-in-out; }
+  .dot:nth-of-type(2) { animation-delay:.2s; } .dot:nth-of-type(3) { animation-delay:.4s; }
+  @keyframes blink { 0%,60%,100% { opacity:.25; } 30% { opacity:1; } }
+  .bell { transform-origin:100px 22px; animation: ring 2.6s infinite ease-in-out; }
+  @keyframes ring { 0%,60%,100% { transform:rotate(0); } 10%{transform:rotate(9deg);} 20%{transform:rotate(-8deg);} 30%{transform:rotate(6deg);} 40%{transform:rotate(-4deg);} 50%{transform:rotate(2deg);} }
+  .pulse { transform-origin:100px 60px; animation: pulse 2.2s infinite ease-out; }
+  .pulse.b { animation-delay:1.1s; }
+  @keyframes pulse { 0% { transform:scale(.5); opacity:.9; } 100% { transform:scale(1.6); opacity:0; } }
+  @media (prefers-reduced-motion: reduce) { .dot,.bell,.pulse { animation:none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back" href="/">← back to portfolio</a>
+  <h1>The Three Dots</h1>
+  <div class="meta">Bruhadesh · Nov 2026 · tech × psychology · 6 min read</div>
+
+  <figure>
+    <svg viewBox="0 0 200 230" role="img" aria-label="A phone showing a typing bubble">
+      <rect class="s" x="40" y="8" width="120" height="212" rx="20"/>
+      <line class="s" x1="85" y1="22" x2="115" y2="22"/>
+      <rect class="s" x="56" y="50" width="70" height="26" rx="12"/>
+      <rect class="s" x="86" y="96" width="70" height="26" rx="12"/>
+      <rect class="s" x="62" y="146" width="66" height="30" rx="14"/><path class="s" d="M72 176 L64 188 L84 176"/>
+      <circle class="f dot" cx="75" cy="163" r="4"/>
+      <circle class="f dot" cx="87" cy="163" r="4"/>
+      <circle class="f dot" cx="99" cy="163" r="4"/>
+    </svg>
+    <figcaption>Fig. 1 — three dots, bound to cause feelings.</figcaption>
+  </figure>
+
+  <p>You send a message that matters. Two blue ticks appear. Then, at the bottom of the screen: <em>three little dots</em>. They pulse. They vanish. They pulse again. Somewhere in that thirty seconds you have drafted the other person's entire reply in your head, and you didn't like it.</p>
+  <p>It's one of the smallest pieces of UI ever shipped, and one of the most emotionally loaded. Let's look at what it actually is, and why it works on us so well.</p>
+
+  <h2>The tech: a feature that stores nothing</h2>
+  <p>The typing indicator is almost embarrassingly cheap. There's no database row and no message. It's an <b>ephemeral event</b>, a tiny "this person is typing" signal that travels over a persistent connection (usually a WebSocket) and is forgotten as soon as it's delivered.</p>
+<pre><code>// sender: tell the room "I'm typing", but not on every keystroke
+input.addEventListener("input", throttle(() =&gt; {
+  socket.send({ type: "typing", room });
+}, 3000));
+
+// receiver: show the dots, and hide them if no refresh arrives
+socket.on("typing", () =&gt; {
+  showDots();
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(hideDots, 5000);
+});</code></pre>
+  <p>Two small design choices carry the whole feature. The sender <b>throttles</b>, so the server isn't flooded with one event per keypress. The receiver uses a <b>timeout</b>, so if the person stops typing or closes the app, the dots fade by themselves, with no "stopped typing" message needed. The cheapest feature in the app causes some of its biggest feelings.</p>
+
+  <h2>The psychology, part 1: uncertainty hurts more than bad news</h2>
+  <p>In a 2016 study, researchers had people play a game where some rocks hid a snake that delivered a mild electric shock. Stress peaked not when a shock was certain, but when the odds were around <b>50/50</b>. Not knowing was worse than knowing it would hurt.</p>
+  <p>The typing bubble is a 50/50 machine. Something is coming, but you don't know what, or when, or whether it will be edited into nothing. The dots give you <em>just enough</em> information to start worrying and not enough to stop.</p>
+
+  <div class="quote">The dots don't tell you anything. They only tell you that something is about to be told.</div>
+
+  <h2>The psychology, part 2: the slot machine in your pocket</h2>
+  <p>Psychologists have known since the days of B.F. Skinner that rewards delivered <b>unpredictably</b> create the most persistent habits. A pigeon fed on a predictable schedule pauses after each reward. A pigeon fed at random keeps pecking steadily, because the next peck <em>might</em> be the one.</p>
+  <p>Messages work the same way. Most checks of your phone yield nothing; some yield something wonderful. Neuroscience adds that the brain's reward system seems to care as much about <em>anticipation</em> as about the reward itself, which is why wanting to check can feel stronger than what you find. The dots are anticipation in its purest form.</p>
+
+  <figure>
+    <svg viewBox="0 0 360 224" role="img" aria-label="A loop: cue, craving, response, reward">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="#fff"/>
+        </marker>
+      </defs>
+      <rect class="s" x="130" y="10" width="100" height="36" rx="8"/><text x="180" y="33">cue</text>
+      <rect class="s" x="250" y="94" width="100" height="36" rx="8"/><text x="300" y="117">craving</text>
+      <rect class="s" x="130" y="176" width="100" height="36" rx="8"/><text x="180" y="199">response</text>
+      <rect class="s" x="10" y="94" width="100" height="36" rx="8"/><text x="60" y="117">reward</text>
+      <path class="s" d="M234 28 Q300 28 300 90" marker-end="url(#ah)"/>
+      <path class="s" d="M300 134 Q300 194 234 194" marker-end="url(#ah)"/>
+      <path class="s" d="M126 194 Q60 194 60 134" marker-end="url(#ah)"/>
+      <path class="s" d="M60 90 Q60 28 126 28" marker-end="url(#ah)"/>
+      <text x="180" y="116" style="fill:#888;font-style:italic">the habit loop</text>
+    </svg>
+    <figcaption>Fig. 2 — ding (cue), itch (craving), unlock (response), maybe-something-good (reward). Repeat.</figcaption>
+  </figure>
+
+  <h2>The psychology, part 3: the ding</h2>
+  <p>Now add sound. Notification tones are engineered to be short, clear and a little pleasant, and then they are paired, hundreds of times, with the arrival of something that matters. That's classic <b>Pavlovian conditioning</b>: after enough repetitions the sound alone is enough to make your attention snap towards the phone.</p>
+  <p>It goes further than you'd think. Many people report <b>phantom vibrations</b>, feeling a buzz that never happened. Your brain has learned the pattern so well that it fills in the cue by itself.</p>
+
+  <figure>
+    <svg viewBox="0 0 200 150" role="img" aria-label="A ringing bell">
+      <g class="bell">
+        <circle class="s" cx="100" cy="16" r="5"/>
+        <path class="s" d="M100 22 C72 22 64 52 64 80 L64 98 L50 114 L150 114 L136 98 L136 80 C136 52 128 22 100 22 Z"/>
+        <path class="s" d="M90 120 a10 10 0 0 0 20 0"/>
+      </g>
+      <path class="s" d="M38 50 Q26 76 38 102"/><path class="s" d="M24 40 Q6 76 24 112"/>
+      <path class="s" d="M162 50 Q174 76 162 102"/><path class="s" d="M176 40 Q194 76 176 112"/>
+    </svg>
+    <figcaption>Fig. 3 — a sound your brain has learned to obey.</figcaption>
+  </figure>
+
+  <h2>A note on the little green dot</h2>
+  <p>"Online" indicators are the quiet cousin of the typing bubble. Technically they're <b>presence</b>: a heartbeat the app sends every so often, with the server marking you "away" if the beats stop. Psychologically they turn a private act (you glanced at your phone) into a public one, and invite a question nobody asked: <em>they're online, so why haven't they replied?</em></p>
+
+  <figure>
+    <svg viewBox="0 0 200 120" role="img" aria-label="A glowing presence dot">
+      <circle class="s pulse" cx="100" cy="60" r="30"/>
+      <circle class="s pulse b" cx="100" cy="60" r="30"/>
+      <circle class="f" cx="100" cy="60" r="12"/>
+    </svg>
+    <figcaption>Fig. 4 — a heartbeat that someone else reads as an answer.</figcaption>
+  </figure>
+
+  <h2>The open loop</h2>
+  <p>There's an old idea, the Zeigarnik effect, that unfinished tasks stick in memory more stubbornly than finished ones. Its research history is mixed, so don't treat it as a law, but the intuition fits: a typing bubble that disappears leaves an <b>open loop</b>, and open loops keep pinging the mind until something closes them.</p>
+
+  <h2>If you build this stuff</h2>
+  <ul>
+    <li>Show indicators <b>after a short delay</b> and expire them quickly, so a half-started sentence doesn't become a drama.</li>
+    <li>Let people <b>turn off</b> typing indicators, read receipts and last-seen. Control is the antidote to the anxiety.</li>
+    <li>Be careful with variable rewards. "Might be something" is a powerful lever, and it works on whoever you're building for.</li>
+    <li>Ask the uncomfortable question: is this feature informing the user, or <em>hooking</em> them?</li>
+  </ul>
+
+  <h2>If you just use this stuff</h2>
+  <ul>
+    <li>Pick a <b>quiet, boring</b> notification sound, or none at all. Weaken the cue and the loop gets weaker.</li>
+    <li>Check messages in <b>batches</b>, not on every ding. Take back the schedule.</li>
+    <li>When the dots appear, remind yourself: they're a <b>signal</b>, not a message. Nothing has been said yet.</li>
+  </ul>
+
+  <p>Three dots, a tiny sound, one green circle. None of it is magic. It's just engineering that understands people a little too well, which is exactly why it's worth understanding back.</p>
+
+  <hr>
+  <p class="foot">Written by Bruhadesh · <a href="https://github.com/kbruhadesh">GitHub</a> · <a href="https://www.linkedin.com/in/kbruhadesh/">LinkedIn</a></p>
+</div>
+</body>
+</html>

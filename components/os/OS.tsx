@@ -358,12 +358,12 @@ export default function OS() {
         className="pointer-events-none absolute left-[max(230px,25vw)] top-[45%] z-[2] hidden max-w-[470px] -translate-y-1/2 select-none md:block"
       >
         <p className="font-pixel text-[13px] uppercase leading-[2.2] tracking-[0.05em] text-cream [text-shadow:2px_2px_0_rgba(0,20,22,0.4)]">
-          Hey, I&apos;m <span className="text-amber">{profile.name}</span> — a{" "}
-          <span className="text-amber">backend engineer</span>{" "}
-          who takes products from first commit to production. These days
-          I&apos;m the founding engineer at{" "}
-          <span className="text-amber">GameGround</span>; before that I
-          interned on Google search. Have a look at my{" "}
+                    Hey, I&apos;m <span className="text-amber">{profile.name}</span> — a{" "}
+          <span className="text-amber">final-year CS student</span>{" "}
+          who builds AI and backend systems. These days I&apos;m an intern on
+          the R&amp;D team at{" "}
+          <span className="text-amber">Diebold Nixdorf</span>, working on
+          agentic AI; before that I interned at ItVersity. Have a look at my{" "}
           <button
             onClick={() => { sounds.click(); openApp("projects"); }}
             className="pointer-events-auto cursor-pointer uppercase text-amber underline decoration-amber/50 decoration-2 underline-offset-4 transition-colors hover:text-cream focus-visible:ring-2 focus-visible:ring-amber"
