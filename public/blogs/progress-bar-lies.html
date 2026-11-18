@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Progress Bar Lies (and We Love It) — Bruhadesh</title>
+<meta name="description" content="Perceived performance, the labor illusion and the peak-end rule: why felt time matters more than real time.">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #000; }
+  body { background:#000; color:#fff; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+         font-size:17px; line-height:1.75; -webkit-font-smoothing:antialiased; }
+  .page { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  a { color:#fff; border-bottom:1px solid #555; text-decoration:none; }
+  a:hover { border-bottom-color:#fff; }
+  .back { font-size:14px; color:#aaa; border:none; }
+  .back:hover { color:#fff; }
+  h1 { font-size:40px; line-height:1.15; font-weight:600; letter-spacing:-0.8px; margin:28px 0 10px; }
+  .meta { color:#aaa; font-size:14px; margin-bottom:36px; }
+  h2 { font-size:22px; font-weight:600; margin:44px 0 12px; }
+  p { margin-bottom:18px; color:#ddd; }
+  ul { margin:0 0 18px 22px; color:#ddd; }
+  li { margin-bottom:8px; }
+  em { color:#fff; }
+  .note { border-left:2px solid #555; padding-left:16px; color:#aaa; margin-bottom:22px; }
+  .quote { font-size:22px; line-height:1.45; color:#fff; margin:34px 0; padding-left:18px; border-left:2px solid #fff; }
+  .pm { border:1px solid #444; border-radius:8px; padding:16px 18px 6px; margin:26px 0; }
+  .pm h3 { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#aaa; margin-bottom:10px; font-weight:600; }
+  hr { border:none; border-top:1px solid #333; margin:48px 0 24px; }
+  .foot { color:#aaa; font-size:14px; }
+  figure { margin:34px 0; text-align:center; }
+  figure svg { width:100%; max-width:340px; height:auto; }
+  figcaption { color:#888; font-size:13px; margin-top:10px; font-style:italic; }
+  .s { fill:none; stroke:#fff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .d { stroke-dasharray:5 5; }
+  .f { fill:#fff; stroke:none; }
+  svg text { fill:#fff; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:12px; text-anchor:middle; }
+  svg text.g { fill:#999; font-style:italic; }
+  .fill { animation: grow 4s infinite ease-in-out; transform-origin:left center; }
+  @keyframes grow { 0% { transform:scaleX(.1);} 70% { transform:scaleX(.62);} 100% { transform:scaleX(.62);} }
+  .ball { animation: roll 3s infinite ease-in-out; }
+  @keyframes roll { 0%,100% { transform:translateX(-6px);} 50% { transform:translateX(6px);} }
+  .sand { animation: fall 2s infinite linear; }
+  @keyframes fall { 0% { opacity:1; } 50% { opacity:.3; } 100% { opacity:1; } }
+  @media (prefers-reduced-motion: reduce) { .fill,.ball,.sand { animation:none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back" href="/">← back to portfolio</a>
+  <h1>The Progress Bar Lies (and We Love It)</h1>
+  <div class="meta">Bruhadesh · Nov 2026 · product × psychology · 6 min read</div>
+
+  <figure>
+    <svg viewBox="0 0 320 150" role="img" aria-label="A progress bar and a skeleton loading screen">
+      <rect class="s" x="50" y="22" width="220" height="20" rx="10"/>
+      <rect class="f fill" x="52" y="24" width="216" height="16" rx="8"/>
+      <circle class="s d" cx="80" cy="96" r="16"/>
+      <rect class="s d" x="108" y="84" width="150" height="10" rx="5"/>
+      <rect class="s d" x="108" y="102" width="100" height="10" rx="5"/>
+      <text x="160" y="140" class="g">one wait, two ways to feel it</text>
+    </svg>
+    <figcaption>Fig. 1 — a progress bar and a skeleton screen.</figcaption>
+  </figure>
+
+  <p>Nobody has ever timed a progress bar with a stopwatch. They <em>feel</em> it. And what they feel has surprisingly little to do with how many seconds it actually took. That gap between real time and felt time is one of the most useful ideas in product design.</p>
+
+  <h2>Time is felt, not measured</h2>
+  <p>Usability researchers have long used three rough thresholds for response time: about <b>0.1 seconds</b> feels instant, about <b>1 second</b> keeps your train of thought unbroken, and about <b>10 seconds</b> is the limit of holding your attention on the task. Beyond that, people drift to another tab and may not come back.</p>
+  <p>A good loading experience is therefore less about being fast and more about managing which of those thresholds you're in, and what the user's mind is doing while it waits.</p>
+
+  <figure>
+    <svg viewBox="0 0 200 120" role="img" aria-label="An hourglass">
+      <path class="s" d="M60 10 H140 L112 55 L140 100 H60 L88 55 Z"/>
+      <line class="s" x1="50" y1="10" x2="150" y2="10"/><line class="s" x1="50" y1="100" x2="150" y2="100"/>
+      <line class="s sand" x1="100" y1="56" x2="100" y2="88"/>
+      <path class="f" d="M80 100 L120 100 L100 84 Z"/>
+    </svg>
+    <figcaption>Fig. 2 — waiting with nothing to look at is the worst kind.</figcaption>
+  </figure>
+
+  <h2>The labor illusion: we value visible effort</h2>
+  <p>In a well-known study, Ryan Buell and Michael Norton found that people rated online services more highly when the site <em>showed the work being done</em>, such as "searching airlines&hellip;", even when that made them wait longer than an instant result would have. We treat visible effort as a sign of value.</p>
+  <p>That's why travel sites often show a "checking 400 options" screen. Sometimes the results are ready sooner, and the screen exists because instant answers can feel suspiciously cheap.</p>
+  <p class="note">The ethical edge: showing real work builds trust, but staging fake work can backfire badly once people notice. Use it to explain, not to deceive.</p>
+
+  <h2>Shapes that make waiting feel shorter</h2>
+  <ul>
+    <li><b>Skeleton screens</b> show the outline of what's coming, so the wait feels like it's already in progress. The research evidence is mixed, but they're popular for a reason.</li>
+    <li><b>Progress bars that finish strong.</b> Researchers studying perceived duration have found that bars which speed up towards the end feel faster than steady ones.</li>
+    <li><b>Something to do.</b> A tip, a preview, a task. Occupied time is felt as shorter than empty time.</li>
+  </ul>
+
+  <h2>The peak-end rule</h2>
+  <p>Kahneman and colleagues ran a famous experiment where people held a hand in painfully cold water. In one version they endured the cold a bit longer, but the final stretch was slightly less cold. Afterwards, many preferred repeating the <em>longer</em> trial. People don't remember experiences as averages. They remember the <b>peak</b> and the <b>end</b>.</p>
+
+  <figure>
+    <svg viewBox="0 0 320 150" role="img" aria-label="A line chart of an experience with a peak and an end marked">
+      <line class="s" x1="20" y1="124" x2="304" y2="124"/><line class="s" x1="20" y1="124" x2="20" y2="14"/>
+      <polyline class="s" points="30,100 80,82 130,34 180,72 232,98 290,50"/>
+      <circle class="f" cx="130" cy="34" r="5"/><circle class="f" cx="290" cy="50" r="5"/>
+      <text x="130" y="22">peak</text><text x="290" y="38">end</text>
+      <text x="162" y="144" class="g">time</text>
+    </svg>
+    <figcaption>Fig. 3 — memory keeps two moments and rounds off the rest.</figcaption>
+  </figure>
+
+  <div class="quote">People don't rate how long it took. They rate how it felt at the worst and last moments.</div>
+
+  <div class="pm">
+    <h3>What this means when you ship</h3>
+    <ul>
+      <li>Fix the <b>worst moment</b> of the flow first: the slowest screen, the most confusing step.</li>
+      <li>Treat the <b>ending</b> as a feature. A clear, calm success state beats a long flow that just stops.</li>
+      <li>Keep the last stretch fast and the wording reassuring.</li>
+      <li>Tell the truth about what's happening. Smooth the experience, don't fake the outcome.</li>
+    </ul>
+  </div>
+
+  <p>Performance has two layers: how fast the system is, and how fast it <em>feels</em>. Engineers own the first one. Product design owns the second, and users only ever experience the second.</p>
+
+  <hr>
+  <p class="foot">Written by Bruhadesh · <a href="https://github.com/kbruhadesh">GitHub</a> · <a href="https://www.linkedin.com/in/kbruhadesh/">LinkedIn</a></p>
+</div>
+</body>
+</html>

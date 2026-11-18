@@ -324,6 +324,33 @@ export const blogs: Blog[] = [
   ],
   link: "/blogs/endless-scroll.html",
 },
+{
+  id: "are-you-sure",
+  title: "Are You Sure?",
+  date: "Nov 2026",
+  summary:
+    "Why confirmation dialogs sometimes protect users and sometimes become meaningless interruptions. Exploring loss aversion, alert fatigue, and friction in product design.",
+  tags: ["Product Design", "Psychology", "UX"],
+  link: "/blogs/are-you-sure.html",
+},
+{
+  id: "defaults-are-decisions",
+  title: "Defaults Are Decisions",
+  date: "Nov 2026",
+  summary:
+    "How pre-selected options influence user behaviour through status quo bias, effort, and implied endorsement — and why responsible defaults matter.",
+  tags: ["Product Design", "Psychology", "UX"],
+  link: "/blogs/defaults-are-decisions.html",
+},
+{
+  id: "progress-bar-lies",
+  title: "The Progress Bar Lies (and We Love It)",
+  date: "Nov 2026",
+  summary:
+    "Exploring perceived performance, the labour illusion, skeleton screens, and the psychology of why waiting sometimes feels shorter than it really is.",
+  tags: ["Product Design", "Psychology", "Performance"],
+  link: "/blogs/progress-bar-lies.html",
+},
 ];
 
 

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>“Are You Sure?” — Bruhadesh</title>
+<meta name="description" content="When a small speed bump helps users, why vague confirmations fail, and how loss aversion shapes good dialog design.">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #000; }
+  body { background:#000; color:#fff; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+         font-size:17px; line-height:1.75; -webkit-font-smoothing:antialiased; }
+  .page { max-width: 680px; margin: 0 auto; padding: 64px 24px 96px; }
+  a { color:#fff; border-bottom:1px solid #555; text-decoration:none; }
+  a:hover { border-bottom-color:#fff; }
+  .back { font-size:14px; color:#aaa; border:none; }
+  .back:hover { color:#fff; }
+  h1 { font-size:40px; line-height:1.15; font-weight:600; letter-spacing:-0.8px; margin:28px 0 10px; }
+  .meta { color:#aaa; font-size:14px; margin-bottom:36px; }
+  h2 { font-size:22px; font-weight:600; margin:44px 0 12px; }
+  p { margin-bottom:18px; color:#ddd; }
+  ul { margin:0 0 18px 22px; color:#ddd; }
+  li { margin-bottom:8px; }
+  em { color:#fff; }
+  .note { border-left:2px solid #555; padding-left:16px; color:#aaa; margin-bottom:22px; }
+  .quote { font-size:22px; line-height:1.45; color:#fff; margin:34px 0; padding-left:18px; border-left:2px solid #fff; }
+  .pm { border:1px solid #444; border-radius:8px; padding:16px 18px 6px; margin:26px 0; }
+  .pm h3 { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#aaa; margin-bottom:10px; font-weight:600; }
+  hr { border:none; border-top:1px solid #333; margin:48px 0 24px; }
+  .foot { color:#aaa; font-size:14px; }
+  figure { margin:34px 0; text-align:center; }
+  figure svg { width:100%; max-width:340px; height:auto; }
+  figcaption { color:#888; font-size:13px; margin-top:10px; font-style:italic; }
+  .s { fill:none; stroke:#fff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .d { stroke-dasharray:5 5; }
+  .f { fill:#fff; stroke:none; }
+  svg text { fill:#fff; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:12px; text-anchor:middle; }
+  svg text.g { fill:#999; font-style:italic; }
+  .fill { animation: grow 4s infinite ease-in-out; transform-origin:left center; }
+  @keyframes grow { 0% { transform:scaleX(.1);} 70% { transform:scaleX(.62);} 100% { transform:scaleX(.62);} }
+  .ball { animation: roll 3s infinite ease-in-out; }
+  @keyframes roll { 0%,100% { transform:translateX(-6px);} 50% { transform:translateX(6px);} }
+  .sand { animation: fall 2s infinite linear; }
+  @keyframes fall { 0% { opacity:1; } 50% { opacity:.3; } 100% { opacity:1; } }
+  @media (prefers-reduced-motion: reduce) { .fill,.ball,.sand { animation:none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back" href="/">← back to portfolio</a>  
+  <h1>“Are You Sure?”</h1>
+  <div class="meta">Bruhadesh · Nov 2026 · product × psychology · 6 min read</div>
+
+  <figure>
+    <svg viewBox="0 0 320 170" role="img" aria-label="A confirmation dialog with two buttons">
+      <rect class="s" x="50" y="10" width="220" height="150" rx="10"/>
+      <line class="s" x1="50" y1="38" x2="270" y2="38"/>
+      <circle class="f" cx="66" cy="24" r="3"/><circle class="f" cx="78" cy="24" r="3"/>
+      <text x="160" y="72" style="font-size:15px">Are you sure?</text>
+      <line class="s" x1="80" y1="92" x2="240" y2="92"/>
+      <line class="s" x1="100" y1="106" x2="220" y2="106"/>
+      <rect class="s" x="76" y="124" width="76" height="26" rx="6"/><text x="114" y="141">Cancel</text>
+      <rect class="f" x="168" y="124" width="76" height="26" rx="6"/><text x="206" y="141" style="fill:#000">Delete</text>
+    </svg>
+    <figcaption>Fig. 1 — the most-clicked-through box in computing.</figcaption>
+  </figure>
+
+  <p>Product people spend most of their time removing friction: one-tap checkout, one-click sign-in, fewer fields. So it feels strange to say that sometimes the best thing you can ship is a small speed bump. But sometimes it is, and the psychology explains when.</p>
+
+  <h2>Friction is a tool, not an enemy</h2>
+  <p>Friction slows people down. That's bad when they're buying something they want and good when they're about to do something they can't undo. The skill is putting the bump where the regret lives.</p>
+
+  <figure>
+    <svg viewBox="0 0 320 110" role="img" aria-label="A road with a speed bump">
+      <path class="s" d="M10 80 H120 Q160 36 200 80 H310"/>
+      <line class="s d" x1="10" y1="92" x2="310" y2="92"/>
+      <path class="s" d="M30 50 H92"/><path class="s" d="M84 44 L92 50 L84 56"/>
+      <text x="160" y="30" class="g">slow down here</text>
+    </svg>
+    <figcaption>Fig. 2 — good friction is placed, not sprinkled.</figcaption>
+  </figure>
+
+  <h2>Why the wording matters: loss aversion</h2>
+  <p>Psychologists Daniel Kahneman and Amos Tversky showed that losses tend to feel bigger than equivalent gains. The often-quoted estimate is roughly two to one, though it varies by person and context. Losing $10 stings more than finding $10 pleases.</p>
+  <p>That's why a vague "Are you sure?" does so little, while "This will permanently delete 214 photos" does a lot. The second one makes the loss <em>concrete</em>. The user sees what they're about to give up.</p>
+
+  <figure>
+    <svg viewBox="0 0 320 140" role="img" aria-label="A scale tipping towards the loss side">
+      <line class="s" x1="160" y1="30" x2="160" y2="120"/>
+      <path class="s" d="M130 120 H190"/>
+      <line class="s" x1="50" y1="40" x2="270" y2="58"/>
+      <path class="s" d="M50 40 L34 80 H66 Z"/><path class="s" d="M270 58 L254 98 H286 Z"/>
+      <text x="50" y="104">gain $10</text><text x="270" y="122">lose $10</text>
+    </svg>
+    <figcaption>Fig. 3 — a loss weighs more than an equal gain.</figcaption>
+  </figure>
+
+  <h2>The failure mode: alert fatigue</h2>
+  <p>Here's the catch. If you ask "Are you sure?" all the time, people stop reading and start clicking. Studies of browser security warnings have repeatedly found that many people click straight through them. A confirmation that appears every time becomes muscle memory, and muscle memory is not a safety system.</p>
+  <p>There's a better pattern for most actions: <b>let people do it, and let them undo it.</b> A short "Undo" toast after sending an email or archiving a thread doesn't interrupt the 99% of times it was intentional, and it rescues the 1% that wasn't.</p>
+
+  <h2>The dark side: confirmshaming</h2>
+  <p>"Are you sure you want to leave?" is also the favourite sentence of the cancel flow: guilt-trip copy ("No thanks, I don't like saving money"), hidden buttons, five screens between you and the exit. It works in the short term and corrodes trust in the long term, and regulators in several places have begun looking closely at these patterns.</p>
+
+  <div class="pm">
+    <h3>A rule of thumb: friction proportional to regret</h3>
+    <ul>
+      <li><b>Low regret</b> (liking, archiving, renaming): no friction at all.</li>
+      <li><b>Medium regret</b> (sending, moving): no dialog, but a visible <em>undo</em>.</li>
+      <li><b>High and irreversible</b> (deleting data, paying, publishing): confirm, and be specific about the consequence. Some tools even ask you to type the name of what you're deleting, which forces a moment of real attention.</li>
+    </ul>
+  </div>
+
+  <p>The goal of friction isn't to stop people. It's to give a hurried brain one honest chance to catch up with its own hand.</p>
+
+  <hr>
+  <p class="foot">Written by Bruhadesh · <a href="https://github.com/kbruhadesh">GitHub</a> · <a href="https://www.linkedin.com/in/kbruhadesh/">LinkedIn</a></p>
+</div>
+</body>
+</html>
